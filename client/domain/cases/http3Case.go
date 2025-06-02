@@ -13,6 +13,7 @@ func Http3Case(url string, request uint64) {
 
 	start := time.Now()
 	for i := uint64(0); i < request; i++ {
+		chooseLatency()
 		_, err := client.Get(url)
 
 		if err != nil {
