@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func NoLatencyUsecase() {
+func NoLatencyUsecase(requestNumber uint64) {
 	log.Println("NolatencyUsecase: no latency usecase execution started")
 	client := services.Client{}
 
@@ -23,8 +23,8 @@ func NoLatencyUsecase() {
 	}
 
 	timer.Begin()
-	for i := uint64(0); i < uint64(10); i++ {
-		log.Println("NolatencyUsecase: http3 request")
+	for i := uint64(0); i < requestNumber; i++ {
+		log.Println("NolatencyUsecase: http3 request", i, "of", requestNumber)
 		http3Service.Get("https://0.0.0.0:4242/ping")
 	}
 	timer.Stop()
@@ -39,13 +39,13 @@ func NoLatencyUsecase() {
 	}
 
 	timer.Begin()
-	for i := uint64(0); i < uint64(10); i++ {
-		log.Println("NolatencyUsecase: http1 request")
+	for i := uint64(0); i < requestNumber; i++ {
+		log.Println("NolatencyUsecase: http1 request", i, "of", requestNumber)
 		http1Service.Get("http://0.0.0.0:8080/ping")
 	}
 	timer.Stop()
 	var http1Time time.Duration = timer.GetTotal()
 
-	fmt.Println("Total time Spent, HTTP1:", http1Time.Seconds(), "HTTP3:", http3Time.Seconds())
+	fmt.Println("Total time Spent (seconds), HTTP1:", http1Time.Seconds(), "HTTP3:", http3Time.Seconds())
 	log.Println("NolatencyUsecase: no latency usecase execution finished")
 }

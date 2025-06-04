@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func LatencyUsecase() {
+func LatencyUsecase(requestNumber uint64) {
 	log.Println("LatencyUsecase: latency usecase execution started")
 	client := services.Client{}
 	latencyService := services.Latency{}
@@ -24,9 +24,9 @@ func LatencyUsecase() {
 	}
 
 	timer.Begin()
-	for i := uint64(0); i < uint64(10); i++ {
+	for i := uint64(0); i < requestNumber; i++ {
 		latencyService.Wait()
-		log.Println("LatencyUsecase: http3 request")
+		log.Println("LatencyUsecase: http3 request", i, "of", requestNumber)
 		http3Service.Get("https://0.0.0.0:4242/ping")
 	}
 	timer.Stop()
@@ -41,14 +41,14 @@ func LatencyUsecase() {
 	}
 
 	timer.Begin()
-	for i := uint64(0); i < uint64(10); i++ {
+	for i := uint64(0); i < requestNumber; i++ {
 		latencyService.Wait()
-		log.Println("LatencyUsecase: http1 request")
+		log.Println("LatencyUsecase: http1 request", i, "of", requestNumber)
 		http1Service.Get("http://0.0.0.0:8080/ping")
 	}
 	timer.Stop()
 	var http1Time time.Duration = timer.GetTotal()
 
-	fmt.Println("Total time Spent, HTTP1:", http1Time.Seconds(), "HTTP3:", http3Time.Seconds())
+	fmt.Println("Total time Spent (seconds), HTTP1:", http1Time.Seconds(), "HTTP3:", http3Time.Seconds())
 	log.Println("LatencyUsecase: latency usecase execution finished")
 }
