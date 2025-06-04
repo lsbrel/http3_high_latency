@@ -7,16 +7,17 @@ import (
 )
 
 type Latency struct {
-	duration time.Duration
+	samples []time.Duration
 }
 
-func (latency *Latency) SetLatency(duration int) {
-	latency.duration = time.Duration(duration)
+func (latency *Latency) Wait(index uint64) {
+	time.Sleep(latency.samples[index])
 }
 
-func (*Latency) Wait() {
-	random := rand.Intn(150)
-	var latency time.Duration = time.Duration(random)
-	log.Println("Latency added (ms):", random)
-	time.Sleep(latency * time.Millisecond)
+func (latency *Latency) GenerateLatencySample(samplesNumber uint64) {
+	log.Println("Latency: generating latency Distribuition")
+	for i := uint64(0); i < samplesNumber; i++ {
+		latencyDuration := rand.Intn(150) * int(time.Millisecond)
+		latency.samples = append(latency.samples, time.Duration(latencyDuration))
+	}
 }

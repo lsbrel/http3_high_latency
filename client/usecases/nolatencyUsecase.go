@@ -22,9 +22,9 @@ func NoLatencyUsecase(requestNumber uint64) {
 		os.Exit(1)
 	}
 
+	log.Println("NolatencyUsecase: HTTP3 sending requests")
 	timer.Begin()
 	for i := uint64(0); i < requestNumber; i++ {
-		log.Println("NolatencyUsecase: http3 request", i, "of", requestNumber)
 		http3Service.Get("https://0.0.0.0:4242/ping")
 	}
 	timer.Stop()
@@ -38,9 +38,9 @@ func NoLatencyUsecase(requestNumber uint64) {
 		os.Exit(1)
 	}
 
+	log.Println("NolatencyUsecase: HTTP1 sending requests")
 	timer.Begin()
 	for i := uint64(0); i < requestNumber; i++ {
-		log.Println("NolatencyUsecase: http1 request", i, "of", requestNumber)
 		http1Service.Get("http://0.0.0.0:8080/ping")
 	}
 	timer.Stop()

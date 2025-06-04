@@ -13,6 +13,7 @@ func LatencyUsecase(requestNumber uint64) {
 	log.Println("LatencyUsecase: latency usecase execution started")
 	client := services.Client{}
 	latencyService := services.Latency{}
+	latencyService.GenerateLatencySample(requestNumber)
 
 	/** HTTP3 */
 	http3Service, err := client.Init(typos.V3)
@@ -23,10 +24,10 @@ func LatencyUsecase(requestNumber uint64) {
 		os.Exit(1)
 	}
 
+	log.Println("LatencyUsecase: HTTP3 sending requests")
 	timer.Begin()
 	for i := uint64(0); i < requestNumber; i++ {
-		latencyService.Wait()
-		log.Println("LatencyUsecase: http3 request", i, "of", requestNumber)
+		latencyService.Wait(i)
 		http3Service.Get("https://0.0.0.0:4242/ping")
 	}
 	timer.Stop()
@@ -40,10 +41,10 @@ func LatencyUsecase(requestNumber uint64) {
 		os.Exit(1)
 	}
 
+	log.Println("LatencyUsecase: HTTP3 sending requests")
 	timer.Begin()
 	for i := uint64(0); i < requestNumber; i++ {
-		latencyService.Wait()
-		log.Println("LatencyUsecase: http1 request", i, "of", requestNumber)
+		latencyService.Wait(i)
 		http1Service.Get("http://0.0.0.0:8080/ping")
 	}
 	timer.Stop()
