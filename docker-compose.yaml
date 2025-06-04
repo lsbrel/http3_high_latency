@@ -2,17 +2,18 @@ services:
   http3server:
     build:
       context: .
-      dockerfile: ./docker/Server.dockerfile
+      dockerfile: docker/Server.dockerfile
     ports:
       - "4242:4242"
     network_mode: "host"
-    command: "./main http3"
+    command: "./server --server http3"
 
   http1server:
     build:
       context: .
-      dockerfile: ./docker/Server.dockerfile
+      dockerfile: docker/Server.dockerfile
     ports:
       - "8080:8080"
     network_mode: "host"
-    command: "./main http1"
+    command: "./server --server http1"
+
