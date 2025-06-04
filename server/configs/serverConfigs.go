@@ -1,4 +1,4 @@
-package entities
+package configs
 
 type ServerConfig struct {
 	Host string

@@ -1,8 +1,8 @@
-package entities
+package typos
 
 import "net/http"
 
-type Route struct {
+type Endpoint struct {
 	Name     string
 	Callback func(w http.ResponseWriter, r *http.Request)
 }

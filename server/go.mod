@@ -1,4 +1,4 @@
-module http3tcc
+module main
 
 go 1.24.2
 
