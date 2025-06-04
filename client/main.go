@@ -1,28 +1,40 @@
 package main
 
 import (
-	"client/domain/cases"
+	"client/usecases"
+	"flag"
+	"fmt"
 	"io"
 	"log"
-	"os"
+)
+
+type Flags string
+
+const (
+	LatencyDisabled Flags = "nolatency"
+	LatencyEnabled  Flags = "latency"
+	TLS             Flags = "tls"
 )
 
 func main() {
 
-	log.SetOutput(io.Discard)
+	usecaseFlag := flag.String("usecase", "none", "No use case selected. Ex.: ./main --use-case={disabled,enabled,tls}")
+	verbose := flag.Bool("verbose", false, "No verbose selected")
+	flag.Parse()
 
-	typeCase := os.Args[1]
+	if !*verbose {
+		log.SetOutput(io.Discard)
+	}
 
-	var requests []uint64 = []uint64{1, 10, 100, 500, 1000, 2500, 5000, 10000}
-
-	if typeCase == "http1" {
-		for _, request := range requests {
-			cases.Http1Case("http://0.0.0.0:8080/ping", request)
-		}
-	} else if typeCase == "http3" {
-		for _, request := range requests {
-			cases.Http3Case("https://0.0.0.0:4242/ping", request)
-		}
+	switch *usecaseFlag {
+	case string(LatencyDisabled):
+		usecases.NoLatencyUsecase()
+	case string(LatencyEnabled):
+		usecases.LatencyUsecase()
+	case string(TLS):
+		fmt.Println("TLS")
+	default:
+		fmt.Println("No use case selected. Ex.: ./main --use-case={nolatency,latency,tls}")
 	}
 
 }

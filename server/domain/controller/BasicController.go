@@ -1,11 +1,12 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 )
 
 func BasicController(w http.ResponseWriter, r *http.Request) {
-	// fmt.Println("Mensagem recebida")
+	fmt.Println("Mensagem recebida")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message": "pongognpong"}`))

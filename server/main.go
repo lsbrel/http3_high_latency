@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"http3tcc/domain/enum"
 	"http3tcc/infra/server"
-	"io"
-	"log"
 	"os"
 )
 
 func main() {
-
-	log.SetOutput(io.Discard)
 
 	var server server.Server
 
