@@ -1,40 +1,30 @@
 package main
 
 import (
-	"client/typos"
 	"client/usecases"
 	"flag"
-	"fmt"
 	"io"
 	"log"
 )
 
 func main() {
 
-	usecase, requests, verbose := parseFlags()
+	requests, verbose, host := parseFlags()
 
 	if !*verbose {
 		log.SetOutput(io.Discard)
 	}
 
-	switch *usecase {
-	case string(typos.LatencyDisabled):
-		usecases.NoLatencyUsecase(*requests)
-	case string(typos.LatencyEnabled):
-		usecases.LatencyUsecase(*requests)
-	case string(typos.TLS):
-		fmt.Println("TLS")
-	default:
-		fmt.Println("No use case selected. Ex.: ./main --use-case={nolatency,latency,tls}")
-	}
+	usecases.RequestToServer(*requests, *host)
 
 }
 
-func parseFlags() (*string, *uint64, *bool) {
-	usecaseFlag := flag.String("usecase", "none", "No use case selected. Ex.: ./main --use-case={disabled,enabled,tls}")
+func parseFlags() (*uint64, *bool, *string) {
 	requestsFlag := flag.Uint64("requests", 10000, "No requests number setted")
 	verboseFlag := flag.Bool("verbose", false, "No verbose selected")
+	hostFlag := flag.String("host", "https://0.0.0.0", "No Host informed ex.: https://lskr.com.br")
+
 	flag.Parse()
 
-	return usecaseFlag, requestsFlag, verboseFlag
+	return requestsFlag, verboseFlag, hostFlag
 }
