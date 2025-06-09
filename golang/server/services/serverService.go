@@ -28,6 +28,8 @@ func (server *Server) Listen() {
 
 	if server.version == typos.V3 {
 		server.listenHTTP3()
+	} else if server.version == typos.V2 {
+		server.listenHTTP2()
 	} else if server.version == typos.V1 {
 		server.listenHTTP1()
 	} else {
@@ -45,6 +47,15 @@ func (server *Server) SetEndpoint(endpoint typos.Endpoint) {
 func (server *Server) listenHTTP1() {
 	fmt.Printf("Starting HTTP1 Server on http://%s/\n", server.config.Host)
 	err := http.ListenAndServe(server.config.Host, &server.mux)
+	if err != nil {
+		fmt.Println("An error occurred:", err.Error())
+		os.Exit(1)
+	}
+}
+
+func (server *Server) listenHTTP2() {
+	fmt.Printf("Starting HTTP2 Server on http://%s/\n", server.config.Host)
+	err := http.ListenAndServeTLS(server.config.Host, server.config.Cert, server.config.Key, &server.mux)
 	if err != nil {
 		fmt.Println("An error occurred:", err.Error())
 		os.Exit(1)

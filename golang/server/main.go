@@ -30,8 +30,11 @@ func main() {
 	switch *servertype {
 	case string(typos.HTTP1):
 		usecases.Http1Usecase()
+	case string(typos.HTTP2):
+		usecases.Http3Usecase()
 	case string(typos.HTTP3):
 		usecases.Http3Usecase()
+
 	default:
 		fmt.Println("No server type selected, exiting")
 	}
